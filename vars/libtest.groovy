@@ -1,4 +1,4 @@
-def call(){
+def call(String giturl){
 node {
     def server = Artifactory.server 'jfrog-art'
     def rtMaven = Artifactory.newMavenBuild()
@@ -6,7 +6,7 @@ node {
     def SONAR_HOST_URL = 'http://192.168.110.71:9000'
     
     stage ('Clone'){
-        git credentialsId: '454d1ddb-d4ed-4195-a572-4bf96fd8ad19', url: 'git@192.168.110.35:yangs/HISSP.git'
+        git credentialsId: '454d1ddb-d4ed-4195-a572-4bf96fd8ad19', url: giturl
     }
     
     stage('Env capture') {
