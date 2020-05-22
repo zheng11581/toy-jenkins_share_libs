@@ -14,15 +14,7 @@ node {
         buildInfo.env.capture = true
     }
     
-    // 添加元数据方式一（如jira issue ID）
-    stage('Add jiraResult') {
-        def requirements = getRequirementsIds();
-        echo "requirements : ${requirements}" 
-        def revisionIds = getRevisionIds();
-        echo "revisionIds : ${revisionIds}"
-        rtMaven.deployer.addProperty("project.issues", requirements).addProperty("project.revisionIds", revisionIds)
-        rtMaven.deployer.addProperty("JiraUrl", "http://192.168.110.52:8080/browse/" + requirements)
-    }
+
 
     stage ('Artifactory configuration') {
         rtMaven.tool = 'maven-3.6.3' //Tool name from Jenkins configuration
@@ -71,40 +63,5 @@ node {
     }
 }
 }
-//@NonCPS
-def getRequirementsIds() {
-    def reqIds = "";
-    final changeSets = currentBuild.changeSets
-    echo 'changeset count:' + changeSets.size().toString()
-    final changeSetIterator = changeSets.iterator()
-    while (changeSetIterator.hasNext()) {
-        final changeSet = changeSetIterator.next();
-        def logEntryIterator = changeSet.iterator();
-        while (logEntryIterator.hasNext()) {
-            final logEntry = logEntryIterator.next()
-            def patten = ~/#[\w\-_\d]+/;
-            def matcher = (logEntry.getMsg() =~ patten);
-            def count = matcher.getCount();
-            for (int i = 0; i < count; i++) {
-                reqIds += matcher[i].replace('#', '') + ","
-            }
-        }
-    }
-    return reqIds;
-}
-//@NonCPS
-def getRevisionIds() {
-    def reqIds = "";
-    final changeSets = currentBuild.changeSets
-    final changeSetIterator = changeSets.iterator()
-    while (changeSetIterator.hasNext()) {
-        final changeSet = changeSetIterator.next();
-        def logEntryIterator = changeSet.iterator();
-        while (logEntryIterator.hasNext()) {
-            final logEntry = logEntryIterator.next()
-            reqIds += logEntry.getRevision() + ","
-        }
-    }
-    return reqIds
-}
+
 }
