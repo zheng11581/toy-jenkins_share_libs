@@ -36,7 +36,7 @@ def getRevisionIds() {
 }
 
 
-def call(String giturl, String artRepoName){
+def call(String giturl, String artRepoName, String gitBranch){
     node {
         def server = Artifactory.server 'jfrog-art'
         def rtMaven = Artifactory.newMavenBuild()
@@ -46,7 +46,7 @@ def call(String giturl, String artRepoName){
         stage ('Clone') {
             withCredentials([usernameColonPassword(credentialsId: 'gitlab', variable: 'gitlab_token')]) {
                 echo "${gitlab_token}"
-                git branch: 'feature_test001', credentialsId: "${gitlab_token}", url: giturl
+                git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
             }
         }
 
