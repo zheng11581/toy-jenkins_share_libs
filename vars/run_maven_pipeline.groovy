@@ -46,7 +46,7 @@ def call(String giturl, String artRepoName){
         stage ('Clone') {
             withCredentials([usernameColonPassword(credentialsId: 'gitlab', variable: 'gitlab_token')]) {
                 echo "${gitlab_token}"
-                git credentialsId: "${gitlab_token}", url: giturl, branch: 'feature_test001' 
+                git branch: 'feature_test001', credentialsId: "${gitlab_token}", url: giturl
             }
         }
 
