@@ -1,5 +1,42 @@
+//@NonCPS
+def getRequirementsIds() {
+    def reqIds = "";
+    final changeSets = currentBuild.changeSets
+    echo 'changeset count:' + changeSets.size().toString()
+    final changeSetIterator = changeSets.iterator()
+    while (changeSetIterator.hasNext()) {
+        final changeSet = changeSetIterator.next();
+        def logEntryIterator = changeSet.iterator();
+        while (logEntryIterator.hasNext()) {
+            final logEntry = logEntryIterator.next()
+            def patten = ~/#[\w\-_\d]+/;
+            def matcher = (logEntry.getMsg() =~ patten);
+            def count = matcher.getCount();
+            for (int i = 0; i < count; i++) {
+                reqIds += matcher[i].replace('#', '') + ","
+            }
+        }
+    }
+    return reqIds;
+}
+//@NonCPS
+def getRevisionIds() {
+    def reqIds = "";
+    final changeSets = currentBuild.changeSets
+    final changeSetIterator = changeSets.iterator()
+    while (changeSetIterator.hasNext()) {
+        final changeSet = changeSetIterator.next();
+        def logEntryIterator = changeSet.iterator();
+        while (logEntryIterator.hasNext()) {
+            final logEntry = logEntryIterator.next()
+            reqIds += logEntry.getRevision() + ","
+        }
+    }
+    return reqIds
+}
 
-def call(String giturl){
+
+def call(String giturl, String artRepoName){
     node {
         def server = Artifactory.server 'jfrog-art'
         def rtMaven = Artifactory.newMavenBuild()
@@ -7,24 +44,30 @@ def call(String giturl){
         def SONAR_HOST_URL = 'http://192.168.110.71:9000'
 
         stage ('Clone') {
-            git credentialsId: '454d1ddb-d4ed-4195-a572-4bf96fd8ad19', url: giturl
-
-
-
-
+            withCredentials([usernameColonPassword(credentialsId: 'gitlab', variable: 'gitlab_token')]) {
+                echo "${gitlab_token}"
+                git credentialsId: "${gitlab_token}", url: giturl
+            }
         }
 
         stage('Env capture') {
             echo "收集系统变量"
             buildInfo.env.capture = true
         }
-
-
+        
+        stage('Add JIRA Result') {
+            def requirements = getRequirementsIds();
+            echo "requirements : ${requirements}" 
+            def revisionIds = getRevisionIds();
+            echo "revisionIds : ${revisionIds}"
+            rtMaven.deployer.addProperty("project.issues", requirements).addProperty("project.revisionIds", revisionIds)
+            rtMaven.deployer.addProperty("JiraUrl", "http://192.168.110.52:8080/browse/" + requirements)
+        }
 
         stage ('Artifactory configuration') {
             rtMaven.tool = 'maven-3.6.3' //Tool name from Jenkins configuration
-            rtMaven.deployer releaseRepo: 'guide-maven-dev-local', snapshotRepo: 'guide-maven-dev-local', server: server
-            rtMaven.resolver releaseRepo: 'guide-maven-virtual', snapshotRepo: 'guide-maven-virtual', server: server
+            rtMaven.deployer releaseRepo: artRepoName+'-dev-local', snapshotRepo: artRepoName+'-dev-local', server: server
+            rtMaven.resolver releaseRepo: artRepoName+'-virtual', snapshotRepo: artRepoName+'-virtual', server: server
         }
 
 
