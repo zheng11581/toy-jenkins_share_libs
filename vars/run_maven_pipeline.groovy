@@ -48,8 +48,6 @@ def call(String giturl, String artRepoName, String gitBranch){
                 echo "${gitlab_token}"
                 git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
             }
-            echo "${env.GIT_URL}"
-            echo "${env.GIT_BRANCH}"
         }
 
         stage('Env capture') {
@@ -68,8 +66,8 @@ def call(String giturl, String artRepoName, String gitBranch){
 
         stage ('Artifactory configuration') {
             rtMaven.tool = 'maven-3.6.3' //Tool name from Jenkins configuration
-            rtMaven.deployer releaseRepo: artRepoName+'-dev-local', snapshotRepo: artRepoName+'-dev-local', server: server
-            rtMaven.resolver releaseRepo: artRepoName+'-virtual', snapshotRepo: artRepoName+'-virtual', server: server
+            rtMaven.deployer releaseRepo: artRepoName, snapshotRepo: artRepoName, server: server
+            rtMaven.resolver releaseRepo: artRepoName, snapshotRepo: artRepoName, server: server
         }
 
 
