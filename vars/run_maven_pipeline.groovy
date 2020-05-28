@@ -36,7 +36,7 @@ def getRevisionIds() {
 }
 
 
-def call(String giturl, String artRepoName, String gitBranch){
+def call(String giturl, String modName, String artRepoName, String gitBranch){
     node {
         def server = Artifactory.server 'jfrog-art'
         def rtMaven = Artifactory.newMavenBuild()
@@ -105,7 +105,7 @@ def call(String giturl, String artRepoName, String gitBranch){
         }
 
         stage ('Exec Maven') {
-            rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
+            rtMaven.run pom: "${modName}/pom.xml", goals: 'clean install', buildInfo: buildInfo
         }
 
         stage ('Publish build info') {
