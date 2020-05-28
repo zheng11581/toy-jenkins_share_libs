@@ -74,7 +74,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         stage('Sonar Scan'){
             def scannerHome = tool 'sonar-scanner'
             withSonarQubeEnv('sonarqube'){
-                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${JOB_NAME} -Dsonar.sources=. -Dsonar.java.binaries=* "
+                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${JOB_NAME} -Dsonar.sources=./${serviceName} -Dsonar.java.binaries=* "
             }
         }
 
