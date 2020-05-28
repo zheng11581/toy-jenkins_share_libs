@@ -105,7 +105,8 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         }
 
         stage ('Exec Maven') {
-            rtMaven.run pom: "${serviceName}/pom.xml", goals: 'clean install', buildInfo: buildInfo
+            def pomPath = serviceName+"/pom.xml"
+            rtMaven.run pom: pomPath, goals: 'clean install', buildInfo: buildInfo
         }
 
         stage ('Publish build info') {
