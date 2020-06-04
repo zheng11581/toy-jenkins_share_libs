@@ -94,7 +94,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
             echo "issueMap:"+issueMap
             echo "Total:"+issueMap.total
             sonarTotal =  issueMap.total
-            rtMaven.deployer.addProperty("qa.sonar.issues", sonarTotal)
+            rtMaven.deployer.addProperty("qa.sonar.issues", "${sonarTotal}")
             
         }
         
