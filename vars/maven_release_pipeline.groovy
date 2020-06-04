@@ -105,8 +105,6 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
                 descriptor.version = jarVersion
                 descriptor.failOnSnapshot = true
                 descriptor.transform()
-            }else{
-                exit()
             }
         }
 
