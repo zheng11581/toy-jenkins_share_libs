@@ -61,7 +61,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
             def revisionIds = getRevisionIds();
             echo "revisionIds : ${revisionIds}"
             rtMaven.deployer.addProperty("project.issues", requirements).addProperty("project.revisionIds", revisionIds)
-            rtMaven.deployer.addProperty("JiraUrl", "http://192.168.110.52:8080/browse/" + requirements)
+            rtMaven.deployer.addProperty("JiraUrl", "http://jira.bjbryy.cn:18080//browse/" + requirements)
         }
 
         stage ('Artifactory configuration') {
