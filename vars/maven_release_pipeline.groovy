@@ -118,7 +118,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
             rtMaven.resolver server: server, releaseRepo: artRepoName, snapshotRepo: artRepoName
             rtMaven.deployer server: server, releaseRepo: artRepoName, snapshotRepo: artRepoName
 
-            rtMaven.tool = 'maven'
+            rtMaven.tool = 'maven-3.6.3'
             def pomPath = serviceName+"/pom.xml"
             rtMaven.run pom: pomPath, goals: 'clean install', buildInfo: buildInfo
 
