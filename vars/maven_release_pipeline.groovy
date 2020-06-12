@@ -107,10 +107,39 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
                 descriptor.transform()
             }
         }
+        
+        //执行maven构建Release包
+        stage('Release Maven Build'){
+            buildInfo = Artifactory.newBuildInfo()
+            buildInfo.name = 'Platform-maven-releasemgt-release'
+            buildInfo.env.capture = true
+            rtMaven = Artifactory.newMavenBuild()
 
-        stage ('Exec Maven') {
+            rtMaven.resolver server: artiServer, releaseRepo: artRepoName, snapshotRepo: artRepoName
+            rtMaven.deployer server: artiServer, releaseRepo: artRepoName, snapshotRepo: artRepoName
+
+            rtMaven.tool = 'maven'
             def pomPath = serviceName+"/pom.xml"
             rtMaven.run pom: pomPath, goals: 'clean install', buildInfo: buildInfo
+
+            def config = """{
+                        "version": 1,
+                        "issues": {
+                                "trackerName": "JIRA",
+                                "regexp": "#([\\w\\-_\\d]+)\\s(.+)",
+                                "keyGroupIndex": 1,
+                                "summaryGroupIndex": 2,
+                                "trackerUrl": "http://jira.bjbryy.cn:18080/browse/",
+                                "aggregate": "true",
+                                "aggregationStatus": "Released"
+                        }
+                    }"""
+
+
+            buildInfo.issues.collect(artiServer, config)
+
+            artiServer.publishBuildInfo buildInfo
+
         }
 
         stage ('Publish build info') {
