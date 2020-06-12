@@ -136,7 +136,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
                     }"""
 
 
-            buildInfo.issues.collect(artiServer, config)
+            buildInfo.issues.collect(server, config)
 
             server.publishBuildInfo buildInfo
 
