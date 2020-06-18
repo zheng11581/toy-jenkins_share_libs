@@ -104,17 +104,16 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
                 def jarVersion = "${RELEASE_VERSION}"
                 def descriptor = Artifactory.mavenDescriptor()
                 descriptor.version = jarVersion
-                descriptor.failOnSnapshot = true
+                descriptor.failOnSnapshot = false
                 descriptor.transform()
             }
         }
         
         //执行maven构建Release包
         stage('Release Maven Build'){
-            //buildInfo = Artifactory.newBuildInfo()
+            
             buildInfo.name = '1.0.0 version release'
             buildInfo.env.capture = true
-            //rtMaven = Artifactory.newMavenBuild()
 
             rtMaven.resolver server: server, releaseRepo: artRepoName, snapshotRepo: artRepoName
             rtMaven.deployer server: server, releaseRepo: artRepoName, snapshotRepo: artRepoName
