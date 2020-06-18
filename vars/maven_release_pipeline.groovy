@@ -100,7 +100,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         
         stage('Generate Release Version'){
             if( sonarTotal < 4 ) {
-                def jarVersion = "${RELEASE_VERSION}.${BUILD_NUMBER}"
+                def jarVersion = "${RELEASE_VERSION}"
                 def descriptor = Artifactory.mavenDescriptor()
                 descriptor.version = jarVersion
                 descriptor.failOnSnapshot = true
