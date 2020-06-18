@@ -62,7 +62,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
             def revisionIds = getRevisionIds();
             echo "revisionIds : ${revisionIds}"
             rtMaven.deployer.addProperty("project.issues", requirements).addProperty("project.revisionIds", revisionIds)
-            rtMaven.deployer.addProperty("JiraUrl", "http://jira.bjbryy.cn:18080//browse/" + requirements)
+            rtMaven.deployer.addProperty("JiraUrl", "http://jira.bjbryy.cn:18080/browse/" + requirements)
         }
 
         stage ('Artifactory configuration') {
@@ -75,7 +75,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         stage('Sonar Scan'){
             def scannerHome = tool 'sonar-scanner'
             withSonarQubeEnv('sonarqube'){
-                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${JOB_NAME} -Dsonar.sources=./${serviceName} -Dsonar.java.binaries=* "
+                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${JOB_NAME} -Dsonar.sources=${serviceName} -Dsonar.java.binaries=* "
             }
         }
 
