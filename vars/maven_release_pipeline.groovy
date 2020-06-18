@@ -111,6 +111,8 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         
         //执行maven构建Release包
         stage('Release Maven Build'){
+            def pomPath = serviceName+"/pom.xml"
+            sh "sed -i 's/1.0.0-SNAPSHOT/${RELEASE_VERSION}/g' ${pomPath}"
             
             buildInfo.name = '1.0.0 version release'
             buildInfo.env.capture = true
@@ -119,7 +121,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
             rtMaven.deployer server: server, releaseRepo: artRepoName, snapshotRepo: artRepoName
 
             rtMaven.tool = 'maven-3.6.3'
-            def pomPath = serviceName+"/pom.xml"
+            
             rtMaven.run pom: pomPath, goals: 'clean install', buildInfo: buildInfo
 
             def config = """{
