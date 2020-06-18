@@ -48,10 +48,11 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         def RELEASE_VERSION = '1.0.0'
 
         stage ('Clone') {
-            withCredentials([usernameColonPassword(credentialsId: 'gitlab', variable: 'gitlab_token')]) {
-                echo "${gitlab_token}"
-                git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
-            }
+            //withCredentials([usernameColonPassword(credentialsId: 'gitlab', variable: 'gitlab_token')]) {
+            //    echo "${gitlab_token}"
+            //    git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
+            //}
+            git branch: gitBranch, credentialsId: 'gitlab', url: giturl
         }
 
         stage('Env capture') {
