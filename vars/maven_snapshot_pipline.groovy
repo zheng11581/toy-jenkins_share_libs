@@ -44,10 +44,11 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         def SONAR_HOST_URL = 'http://192.168.110.71:9000'
 
         stage ('Clone') {
-            withCredentials([usernameColonPassword(credentialsId: 'gitlab_zhenghc', variable: 'gitlab_token')]) {
-                echo "${gitlab_token}"
-                git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
-            }
+            //withCredentials([usernameColonPassword(credentialsId: 'gitlab_zhenghc', variable: 'gitlab_token')]) {
+            //    echo "${gitlab_token}"
+            //    git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
+            //}
+            git branch: gitBranch, credentialsId: 'gitlab', url: giturl
         }
 
         stage('Env capture') {
