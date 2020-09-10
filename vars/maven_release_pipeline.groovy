@@ -113,7 +113,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         stage('Release Maven Build'){
             def pomPath = serviceName+"/pom.xml"
             sh "sed -i 's/1.0.0-SNAPSHOT/${RELEASE_VERSION}/g' ${pomPath}"
-            
+            sh "cat ${pomPath}"
             buildInfo.name = '1.0.0 version release'
             buildInfo.env.capture = true
 
