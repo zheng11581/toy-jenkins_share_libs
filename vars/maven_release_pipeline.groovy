@@ -39,6 +39,20 @@ def getRevisionIds() {
 
 
 def call(String giturl, String gitBranch, String serviceName, String artRepoName){
+    properties([
+        parameters([
+            gitParameter(branch: '',
+                     branchFilter: 'origin/(.*)',
+                     defaultValue: 'master',
+                     description: '',
+                     name: 'BRANCH',
+                     quickFilterEnabled: false,
+                     selectedValue: 'NONE',
+                     sortMode: 'NONE',
+                     tagFilter: '*',
+                     type: 'PT_BRANCH')
+        ])
+    ])
     node {
         def server = Artifactory.server 'jfrog-art'
         def rtMaven = Artifactory.newMavenBuild()
