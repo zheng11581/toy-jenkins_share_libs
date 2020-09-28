@@ -76,28 +76,28 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         }
 
 
-        //stage('Sonar Scan'){
-        //    def scannerHome = tool 'sonar-scanner'
-        //    withSonarQubeEnv('sonarqube'){
-        //        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${JOB_NAME} -Dsonar.sources=./${serviceName} -Dsonar.java.binaries=* "
-        //    }
-        //}
+        stage('Sonar Scan'){
+            def scannerHome = tool 'sonar-scanner'
+            withSonarQubeEnv('sonarqube'){
+                sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${JOB_NAME} -Dsonar.sources=./${serviceName} -Dsonar.java.binaries=* "
+            }
+        }
 
-        //stage("Add SonarResult"){
+        stage("Add SonarResult"){
             //获取sonar扫描结果
-        //    def getSonarIssuesCmd = "curl  GET -v ${SONAR_HOST_URL}/api/issues/search?componentKeys=${JOB_NAME}";
-        //    echo "getSonarIssuesCmd:"+getSonarIssuesCmd
-        //    process = [ 'bash', '-c', getSonarIssuesCmd].execute().text
+            def getSonarIssuesCmd = "curl  GET -v ${SONAR_HOST_URL}/api/issues/search?componentKeys=${JOB_NAME}";
+            echo "getSonarIssuesCmd:"+getSonarIssuesCmd
+            process = [ 'bash', '-c', getSonarIssuesCmd].execute().text
 
             //增加sonar扫描结果到artifactory
-        //    def jsonSlurper = new JsonSlurper()
-        //    def issueMap = jsonSlurper.parseText(process);
-        //    echo "issueMap:"+issueMap
-        //    echo "Total:"+issueMap.total
-        //    sonarTotal =  issueMap.total
-        //    rtMaven.deployer.addProperty("qa.sonar.issues", "${sonarTotal}")
+            def jsonSlurper = new JsonSlurper()
+            def issueMap = jsonSlurper.parseText(process);
+            echo "issueMap:"+issueMap
+            echo "Total:"+issueMap.total
+            sonarTotal =  issueMap.total
+            rtMaven.deployer.addProperty("qa.sonar.issues", "${sonarTotal}")
             
-        //}
+        }
         
         stage('Generate Release Version'){
             if( sonarTotal < 4 ) {
