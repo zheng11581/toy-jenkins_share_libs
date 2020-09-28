@@ -112,8 +112,8 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         //执行maven构建Release包
         stage('Release Maven Build'){
             def pomPath = serviceName+"/pom.xml"
-            sh "find . -name pom.xml |xargs -i sed -i 's/1.0.0-SNAPSHOT/${RELEASE_VERSION}/g' {}"
-            sh "find . -name pom.xml |cat {}"
+            sh "find . -name pom.xml \|xargs -i sed -i 's/1.0.0-SNAPSHOT/${RELEASE_VERSION}/g' {}"
+            sh "find . -name pom.xml \|xargs -i cat {}"
             buildInfo.name = '1.0.0 version release'
             buildInfo.env.capture = true
 
