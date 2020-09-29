@@ -56,8 +56,7 @@ def call(String serviceName, String artRepoName, String token){
                     printContributedVariables: true,
                     printPostContent: true,
                     silentResponse: false,
-                    token: token,
-                    regexpFilterText: '$ref'
+                    token: token
                 ]
             ])
         ])
