@@ -48,7 +48,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
                         [key: 'ref', value: '$.ref'],
                         [
                             key: 'git_url',
-                            value: '$.repository.url',
+                            value: '$.repository.git_http_url',
                             expressionType: 'JSONPath', //Optional, defaults to JSONPath
                             regexpFilter: '', //Optional, defaults to empty string
                             defaultValue: '' //Optional, defaults to empty string
@@ -78,7 +78,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
             //    echo "${gitlab_token}"
             //    git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
             //}
-            git branch: 'master', credentialsId: 'gitlab', url: 'http://192.168.110.35/HIS/HIS_Back/Common.git'
+            git branch: git_branch, credentialsId: 'gitlab', url: git_url
         }
 
         stage('Env capture') {
