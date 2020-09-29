@@ -39,46 +39,20 @@ def getRevisionIds() {
 
 
 def call(String giturl, String gitBranch, String serviceName, String artRepoName){
-
     node {
-        properties([
-            pipelineTriggers([
-                [$class: 'GenericTrigger',
-                    genericVariables: [
-                        [key: 'ref', value: '$.ref'],
-                        [
-                            key: 'git_url',
-                            value: '$.repository.git_http_url',
-                            expressionType: 'JSONPath', //Optional, defaults to JSONPath
-                            regexpFilter: '', //Optional, defaults to empty string
-                            defaultValue: '' //Optional, defaults to empty string
-                        ]
-                    ],
-
-                    causeString: 'Triggered on $ref',
-                    printContributedVariables: true,
-                    printPostContent: true,
-                    silentResponse: false,
-                    regexpFilterText: '$ref'
-                ]
-            ])
-        ])
         def server = Artifactory.server 'jfrog-art'
         def rtMaven = Artifactory.newMavenBuild()
         def buildInfo = Artifactory.newBuildInfo()
         def SONAR_HOST_URL = 'http://192.168.110.71:9000'
         def sonarTotal
         def RELEASE_VERSION = '1.0.0'
-        def git_branch = "${ref}"
-        def git_url = "${git_url}"
-
 
         stage ('Clone') {
             //withCredentials([usernameColonPassword(credentialsId: 'gitlab', variable: 'gitlab_token')]) {
             //    echo "${gitlab_token}"
             //    git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
             //}
-            git branch: git_branch, credentialsId: 'gitlab', url: git_url
+            git branch: gitBranch, credentialsId: 'gitlab', url: giturl
         }
 
         stage('Env capture') {
