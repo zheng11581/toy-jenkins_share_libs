@@ -36,7 +36,7 @@ def getRevisionIds() {
 }
 
 
-def call(String serviceName, String artRepoName){
+def call(String serviceName, String artRepoName, String token){
     node {
         properties([
             pipelineTriggers([
@@ -56,6 +56,7 @@ def call(String serviceName, String artRepoName){
                     printContributedVariables: true,
                     printPostContent: true,
                     silentResponse: false,
+                    token: token,
                     regexpFilterText: '$ref'
                 ]
             ])
