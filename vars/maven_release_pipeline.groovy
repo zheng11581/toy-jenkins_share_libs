@@ -78,7 +78,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
             //    echo "${gitlab_token}"
             //    git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
             //}
-            git branch: 'refs/heads/master', credentialsId: 'gitlab', url: git_url
+            git branch: 'master', credentialsId: 'gitlab', url: git_url
         }
 
         stage('Env capture') {
