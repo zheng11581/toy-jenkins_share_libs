@@ -44,22 +44,22 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         properties([
             pipelineTriggers([
                 [$class: 'GenericTrigger',
-                genericVariables: [
-                    [key: 'ref', value: '$.ref'],
-                    [
-                        key: 'git_url',
-                        value: '$.repository.url',
-                        expressionType: 'JSONPath', //Optional, defaults to JSONPath
-                        regexpFilter: '', //Optional, defaults to empty string
-                        defaultValue: '' //Optional, defaults to empty string
-                    ]
-                ],
+                    genericVariables: [
+                        [key: 'ref', value: '$.ref'],
+                        [
+                            key: 'git_url',
+                            value: '$.repository.url',
+                            expressionType: 'JSONPath', //Optional, defaults to JSONPath
+                            regexpFilter: '', //Optional, defaults to empty string
+                            defaultValue: '' //Optional, defaults to empty string
+                        ]
+                    ],
 
-                causeString: 'Triggered on $ref',
-                printContributedVariables: true,
-                printPostContent: true,
-                silentResponse: false,
-                regexpFilterText: '$ref',
+                    causeString: 'Triggered on $ref',
+                    printContributedVariables: true,
+                    printPostContent: true,
+                    silentResponse: false,
+                    regexpFilterText: '$ref'
                 ]
             ])
         ])
@@ -69,8 +69,8 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
         def SONAR_HOST_URL = 'http://192.168.110.71:9000'
         def sonarTotal
         def RELEASE_VERSION = '1.0.0'
-        def git_branch = $ref
-        def git_url = $git_url
+        def git_branch = "${ref}"
+        def git_url = "${git_url}"
 
 
         stage ('Clone') {
