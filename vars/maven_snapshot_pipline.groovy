@@ -66,15 +66,16 @@ def call(String serviceName, String artRepoName, String token){
         def SONAR_HOST_URL = 'http://192.168.110.71:9000'
         def sonarTotal
         def RELEASE_VERSION = '1.0.0'
-        def gitBranch = "${ref}"
+        def gitBranchRef = "${ref}"
         def gitUrl = "${git_url}"
+        def gitBranch = gitBranchRef.substring(gitBranchRef.lastIndexOf('/') + 1)
 
         stage ('Clone') {
             //withCredentials([usernameColonPassword(credentialsId: 'gitlab_zhenghc', variable: 'gitlab_token')]) {
             //    echo "${gitlab_token}"
             //    git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
             //}
-            git branch: 'master', credentialsId: 'gitlab', url: gitUrl
+            git branch: gitBranch, credentialsId: 'gitlab', url: gitUrl
         }
 
         stage('Env capture') {
