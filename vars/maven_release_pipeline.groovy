@@ -40,17 +40,25 @@ def getRevisionIds() {
 
 def call(String giturl, String gitBranch, String serviceName, String artRepoName){
     properties([
-        parameters([
-            gitParameter(branch: '',
-                     branchFilter: 'origin/(.*)',
-                     defaultValue: 'master',
-                     description: '',
-                     name: 'BRANCH',
-                     quickFilterEnabled: false,
-                     selectedValue: 'NONE',
-                     sortMode: 'NONE',
-                     tagFilter: '*',
-                     type: 'PT_BRANCH')
+        pipelineTriggers([
+            [$class: 'GenericTrigger',
+            genericVariables: [
+                [key: 'ref', value: '$.ref'],
+                [
+                    key: 'before',
+                    value: '$.before',
+                    expressionType: 'JSONPath', //Optional, defaults to JSONPath
+                    regexpFilter: '', //Optional, defaults to empty string
+                    defaultValue: '' //Optional, defaults to empty string
+                ]
+            ],
+
+            causeString: 'Triggered on $ref',
+            printContributedVariables: true,
+            printPostContent: true,
+            silentResponse: false,
+            regexpFilterText: '$ref'
+            ]
         ])
     ])
     node {
