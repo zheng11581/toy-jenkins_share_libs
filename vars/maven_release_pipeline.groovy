@@ -38,15 +38,15 @@ def getRevisionIds() {
 }
 
 
-def call(String giturl, String gitBranch, String serviceName, String artRepoName){
+def call(String serviceName, String artRepoName){
     properties([
         pipelineTriggers([
             [$class: 'GenericTrigger',
             genericVariables: [
                 [key: 'ref', value: '$.ref'],
                 [
-                    key: 'before',
-                    value: '$.before',
+                    key: 'git_url',
+                    value: '$.repository.url',
                     expressionType: 'JSONPath', //Optional, defaults to JSONPath
                     regexpFilter: '', //Optional, defaults to empty string
                     defaultValue: '' //Optional, defaults to empty string
@@ -74,7 +74,7 @@ def call(String giturl, String gitBranch, String serviceName, String artRepoName
             //    echo "${gitlab_token}"
             //    git branch: gitBranch, credentialsId: "${gitlab_token}", url: giturl
             //}
-            git branch: "${params.BRANCH}", credentialsId: 'gitlab', url: giturl
+            git branch: "$ref", credentialsId: 'gitlab', url: "$git_url"
         }
 
         stage('Env capture') {
